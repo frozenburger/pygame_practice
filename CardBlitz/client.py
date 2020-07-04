@@ -13,6 +13,13 @@ map = []
 card_database = []
 objects = []
 
+# global variables for dragging
+drag_start_x = 0
+drag_start_y = 0
+dragging = False
+drag_color = (0, 0, 0)
+
+
 
 # --------------------------------------------------------------------------------
 
@@ -35,12 +42,12 @@ class Object():
         self.ypos = ypos
         self.drag = False
         self.owner = owner
-        self.rect = pygame.rect.Rect(xpos, ypos, xpos+val.square_size, ypos+val.square_size)
+        self.rect = pygame.rect.Rect(xpos, ypos, val.square_size, val.square_size)
 
     # visualize map
 
 
-def init_map():
+def draw_map():
     window.fill(val.color_black)
     for i in range(7):
         map.append([])
@@ -67,46 +74,105 @@ def init_database():
 
 
 def init_objects():
-    objects.append(Object(card_database[0], 0, 0, 'p2'))
-    objects.append(Object(card_database[1], 3, 0, 'p2'))
-    objects.append(Object(card_database[2], 6, 0, 'p2'))
-    objects.append(Object(card_database[3], 0, 6, 'p1'))
-    objects.append(Object(card_database[4], 3, 6, 'p1'))
-    objects.append(Object(card_database[5], 6, 6, 'p1'))
+    global objects
+    objects.append(Object(card_database[0], val.map_offset+0*(val.square_size+val.seperator_size), val.map_offset+0*(val.square_size+val.seperator_size), 'p2'))
+    objects.append(Object(card_database[1], val.map_offset+3*(val.square_size+val.seperator_size), val.map_offset+0*(val.square_size+val.seperator_size), 'p2'))
+    objects.append(Object(card_database[2], val.map_offset+6*(val.square_size+val.seperator_size), val.map_offset+0*(val.square_size+val.seperator_size), 'p2'))
+    objects.append(Object(card_database[3], val.map_offset+0*(val.square_size+val.seperator_size), val.map_offset+6*(val.square_size+val.seperator_size), 'p1'))
+    objects.append(Object(card_database[4], val.map_offset+3*(val.square_size+val.seperator_size), val.map_offset+6*(val.square_size+val.seperator_size), 'p1'))
+    objects.append(Object(card_database[5], val.map_offset+6*(val.square_size+val.seperator_size), val.map_offset+6*(val.square_size+val.seperator_size), 'p1'))
 
-drag_start_x = 0
-drag_start_y = 0
+
+
 def draw_objects():
+    global objects
     for obj in objects:
-        window.blit(obj.card.image, (val.map_offset + obj.xpos * (val.square_size + val.seperator_size),
-                                val.map_offset + obj.ypos * (val.square_size + val.seperator_size)))
-        if obj.drag == True:
-            drag_start_x = obj.xpos
-            drag_start_y = obj.ypos
+        window.blit(obj.card.image, (obj.xpos, obj.ypos))
 
 def drag_controller(event):
+    global objects, drag_color, dragging, drag_start_x, drag_start_y
     if event.type == pygame.MOUSEBUTTONDOWN:
-        print('clicked!')
-        for object in objects:
-            if object.rect.collidepoint(event.pos):
-                object.drag = True
-                break
-        pygame.draw.line(window, val.color_green, event.pos, (drag_start_x, drag_start_y))
+        if event.button == val.left_mouse:
+            for object in objects:
+                if object.rect.collidepoint(event.pos):
+                    drag_color = val.color_green
+                    dragging = True
+                    object.drag = True
+                    drag_start_x = object.xpos+50
+                    drag_start_y = object.ypos+50
+                    break
+        elif event.button == val.right_mouse:
+            for object in objects:
+                if object.rect.collidepoint(event.pos):
+                    drag_color = val.color_red
+                    dragging = True
+                    object.drag = True
+                    drag_start_x = object.xpos+50
+                    drag_start_y = object.ypos+50
+                    break
     elif event.type == pygame.MOUSEBUTTONUP:
-        dragged = None
+        if event.button == val.left_mouse:
+            if (dragging == True) & in_map(event.pos[0], event.pos[1]) & is_empty(event.pos[0], event.pos[1]):
+                for object in objects:
+                    # find object at start of dragging
+                    if object.rect.collidepoint(drag_start_x, drag_start_y):
+                        # and set its position to event.pos
+                        object.xpos, object.ypos = snap_to_grid(event.pos[0], event.pos[1])
+                        object.rect = pygame.rect.Rect(object.xpos, object.ypos, val.square_size, val.square_size)
+                        object.drag = False
+                        break
+            dragging = False
+        elif event.button == val.right_mouse:
+            if (dragging == True) & in_map(event.pos[0], event.pos[1]) & is_empty(event.pos[0], event.pos[1]):
+                for object in objects:
+                    # find object at start of dragging
+                    if object.rect.collidepoint(drag_start_x, drag_start_y):
+                        # and set its position to event.pos
+                        object.xpos, object.ypos = snap_to_grid(event.pos[0], event.pos[1])
+                        object.rect = pygame.rect.Rect(object.xpos, object.ypos, val.square_size, val.square_size)
+                        object.drag = False
+                        break
+            dragging = False
+
+
+def in_map(xpos, ypos):
+     x_cond = (val.map_offset < xpos) & (xpos < val.map_offset + (val.square_size + val.seperator_size) * 7)
+     y_cond = (val.map_offset < ypos) & (ypos < val.map_offset + (val.square_size + val.seperator_size) * 7)
+     return x_cond & y_cond
+
+def is_empty(xpos, ypos):
+    global objects
+    result = True
+    for object in objects:
+        if object.rect.collidepoint(xpos, ypos):
+            result = False
+    return result
+
+def draw_line():
+    global window, drag_color, drag_start_x, drag_start_y
+    if dragging:
+        pygame.draw.line(window, drag_color, pygame.mouse.get_pos(), (drag_start_x, drag_start_y), 5)
+
+def snap_to_grid(xpos, ypos):
+    x_num = (xpos-val.map_offset) // (val.seperator_size + val.square_size)
+    y_num = (ypos-val.map_offset) // (val.seperator_size + val.square_size)
+    xpos = x_num * (val.seperator_size + val.square_size) + val.map_offset
+    ypos = y_num * (val.seperator_size + val.square_size) + val.map_offset
+    return xpos, ypos
 
 
 # def init_etc_objects():
 
 
 def main():
-    init_map()
     init_database()
     init_objects()
     while (True):
+        draw_map()
         for event in pygame.event.get():
             drag_controller(event)
         draw_objects()
+        draw_line()
         pygame.display.update()
 
 
