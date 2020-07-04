@@ -5,7 +5,7 @@ import CardBlitz.static_values as val
 import pandas as pd
 
 # setup window
-window = pygame.display.set_mode((val.window_width, val.window_height))
+window = pygame.display.set_mode((val.window_width+val.interface_width, val.window_height))
 pygame.display.set_caption("Card Blitz")
 
 # in-game resource tracking
@@ -38,6 +38,7 @@ class Card():
 class Object():
     def __init__(self, card, xpos, ypos, owner):
         self.card = card
+        self.hp_current = self.card.hp
         self.xpos = xpos
         self.ypos = ypos
         self.drag = False
@@ -82,12 +83,36 @@ def init_objects():
     objects.append(Object(card_database[4], val.map_offset+3*(val.square_size+val.seperator_size), val.map_offset+6*(val.square_size+val.seperator_size), 'p1'))
     objects.append(Object(card_database[5], val.map_offset+6*(val.square_size+val.seperator_size), val.map_offset+6*(val.square_size+val.seperator_size), 'p1'))
 
-
-
 def draw_objects():
     global objects
+    for index, obj in enumerate(objects):
+        if obj.hp_current <= 0:
+            objects.pop(index)
     for obj in objects:
         window.blit(obj.card.image, (obj.xpos, obj.ypos))
+        hp_bar_size = int(val.square_size*(obj.hp_current / obj.card.hp))
+        max_hp_rect = (obj.xpos, obj.ypos + val.square_size - val.hp_bar_height, val.square_size, val.hp_bar_height)
+        cur_hp_rect = (obj.xpos, obj.ypos + val.square_size - val.hp_bar_height, hp_bar_size, val.hp_bar_height)
+        pygame.draw.rect(window, val.color_red, max_hp_rect)
+        pygame.draw.rect(window, val.color_green, cur_hp_rect)
+
+        team_border = (obj.xpos, obj.ypos, val.square_size, val.square_size - val.hp_bar_height)
+        if obj.owner == 'p1':
+            pygame.draw.rect(window, val.color_red_light, team_border, val.team_boundary_thickness)
+        elif obj.owner == 'p2':
+            pygame.draw.rect(window, val.color_blue_light, team_border, val.team_boundary_thickness)
+
+
+
+'''
+        boundary_ext = pygame.Surface((val.square_size, val.square_size-val.hp_bar_height)).fill(val.color_blue_dark)
+        boundary_int = pygame.Surface((val.square_size-2*(val.team_boundary_thickness), val.square_size-val.hp_bar_height-2*(val.team_boundary_thickness)))
+        boundary_int.set_alpha(0)
+        boundary_ext.blit(boundary_int, (val.team_boundary_thickness, val.team_boundary_thickness))
+        window.blit(boundary_ext, (obj.xpos, obj.ypos))
+'''
+
+
 
 def drag_controller(event):
     global objects, drag_color, dragging, drag_start_x, drag_start_y
@@ -123,15 +148,18 @@ def drag_controller(event):
                         break
             dragging = False
         elif event.button == val.right_mouse:
-            if (dragging == True) & in_map(event.pos[0], event.pos[1]) & is_empty(event.pos[0], event.pos[1]):
+            # check if target location is valid
+            if (dragging == True) & in_map(event.pos[0], event.pos[1]) & (is_empty(event.pos[0], event.pos[1])==False):
                 for object in objects:
-                    # find object at start of dragging
                     if object.rect.collidepoint(drag_start_x, drag_start_y):
-                        # and set its position to event.pos
-                        object.xpos, object.ypos = snap_to_grid(event.pos[0], event.pos[1])
-                        object.rect = pygame.rect.Rect(object.xpos, object.ypos, val.square_size, val.square_size)
+                        attacker = object
+                    if object.rect.collidepoint(event.pos[0], event.pos[1]):
+                        defender = object
                         object.drag = False
-                        break
+                print(defender.hp_current, attacker.card.atk)
+                if attacker != defender :
+                    defender.hp_current -= attacker.card.atk
+                print(defender.hp_current, attacker.card.atk)
             dragging = False
 
 
@@ -151,7 +179,7 @@ def is_empty(xpos, ypos):
 def draw_line():
     global window, drag_color, drag_start_x, drag_start_y
     if dragging:
-        pygame.draw.line(window, drag_color, pygame.mouse.get_pos(), (drag_start_x, drag_start_y), 5)
+        pygame.draw.line(window, drag_color, pygame.mouse.get_pos(), (drag_start_x, drag_start_y), val.drag_line_thickness)
 
 def snap_to_grid(xpos, ypos):
     x_num = (xpos-val.map_offset) // (val.seperator_size + val.square_size)
