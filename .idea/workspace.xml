@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1c6b955-6dbb-405f-93ac-f5d0472f6508" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/000_attack.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/001_move.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/002_skill.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/004_nextturn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CardBlitz/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CardBlitz/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/000_dragon.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/000_dragon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/001_warrior.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/001_warrior.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/002_archer.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/002_archer.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/003_witch.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/003_witch.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/004_cleric.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/004_cleric.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/005_wasp.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/005_wasp.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CardBlitz/static_values.py" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/static_values.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -208,6 +198,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="server (2)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="pygame_practice" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CardBlitz" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CardBlitz/server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="server" type="PythonConfigurationType" factoryName="Python">
       <module name="pygame_practice" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -238,10 +249,12 @@
       <item itemvalue="Python.client (1)" />
       <item itemvalue="Python.server (1)" />
       <item itemvalue="Python.client (2)" />
+      <item itemvalue="Python.server (2)" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.client (1)" />
+        <item itemvalue="Python.server (2)" />
         <item itemvalue="Python.client (2)" />
         <item itemvalue="Python.server (1)" />
         <item itemvalue="Python.chess" />

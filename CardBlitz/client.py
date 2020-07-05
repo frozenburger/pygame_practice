@@ -2,7 +2,9 @@ import os
 import pygame
 import CardBlitz.static_values as val
 import pandas as pd
+import socket
 from CardBlitz.classes import *
+
 
 # setup window
 window = pygame.display.set_mode((val.window_width+val.interface_width, val.window_height))
@@ -21,7 +23,6 @@ player = Player('p1')
 opponent = Player('p2')
 turn_player = 'p1'
 
-
 # global variables for clicking & dragging
 drag_start_x = 0
 drag_start_y = 0
@@ -29,6 +30,8 @@ dragging = False
 drag_color = (0, 0, 0)
 clicked_object = ''
 
+# networking variables
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 # --------------------------------------------------------------------------------
@@ -264,7 +267,22 @@ def snap_to_grid(xpos, ypos):
     return xpos, ypos
 
 
-# def init_etc_objects():
+def init_networking():
+    global client
+    server = val.server
+    port = val.port
+    client.connect((server, port))
+
+def send_message(msg_string):
+    message = msg_string.encode(val.utf8)
+    msg_len = len(message)
+
+    # pad header into max length
+    header = str(msg_len).encode(val.utf8)
+    header += b' '*(val.header_len - len(header))
+
+    client.send(header)
+    client.send(message)
 
 
 def main():
@@ -272,6 +290,8 @@ def main():
     init_objects()
     init_interface()
 
+    init_networking()
+    send_message('Hello World from client!')
     while (True):
         draw_map()
         draw_interface()

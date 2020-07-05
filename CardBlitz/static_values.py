@@ -19,3 +19,9 @@ seperator_size = 5
 left_mouse = 1
 right_mouse = 3
 drag_line_thickness = 5
+
+# Network Variables
+server = '192.168.56.1'
+port = 8888
+utf8 = 'utf-8'
+header_len = 64
