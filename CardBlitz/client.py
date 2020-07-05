@@ -1,8 +1,8 @@
 import os
-
 import pygame
 import CardBlitz.static_values as val
 import pandas as pd
+from CardBlitz.classes import *
 
 # setup window
 window = pygame.display.set_mode((val.window_width+val.interface_width, val.window_height))
@@ -12,6 +12,8 @@ pygame.display.set_caption("Card Blitz")
 map = []
 card_database = []
 objects = []
+player = Player('p1')
+
 
 # global variables for dragging
 drag_start_x = 0
@@ -22,31 +24,7 @@ drag_color = (0, 0, 0)
 
 
 # --------------------------------------------------------------------------------
-
-# properties of a card
-class Card():
-    def __init__(self, id, name, atk, range, hp, spd, image):
-        self.id = id
-        self.name = name
-        self.atk = atk
-        self.range = range
-        self.hp = hp
-        self.spd = spd
-        self.image = image
-
-# properties of an object
-class Object():
-    def __init__(self, card, xpos, ypos, owner):
-        self.card = card
-        self.hp_current = self.card.hp
-        self.xpos = xpos
-        self.ypos = ypos
-        self.drag = False
-        self.owner = owner
-        self.rect = pygame.rect.Rect(xpos, ypos, val.square_size, val.square_size)
-
-    # visualize map
-
+# visualize map
 
 def draw_map():
     window.fill(val.color_black)
@@ -115,11 +93,11 @@ def draw_objects():
 
 
 def drag_controller(event):
-    global objects, drag_color, dragging, drag_start_x, drag_start_y
+    global objects, drag_color, dragging, drag_start_x, drag_start_y, player
     if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == val.left_mouse:
             for object in objects:
-                if object.rect.collidepoint(event.pos):
+                if object.rect.collidepoint(event.pos) & (player.id == object.owner):
                     drag_color = val.color_green
                     dragging = True
                     object.drag = True
@@ -128,7 +106,7 @@ def drag_controller(event):
                     break
         elif event.button == val.right_mouse:
             for object in objects:
-                if object.rect.collidepoint(event.pos):
+                if object.rect.collidepoint(event.pos) & (player.id == object.owner):
                     drag_color = val.color_red
                     dragging = True
                     object.drag = True
@@ -156,10 +134,11 @@ def drag_controller(event):
                     if object.rect.collidepoint(event.pos[0], event.pos[1]):
                         defender = object
                         object.drag = False
-                print(defender.hp_current, attacker.card.atk)
-                if attacker != defender :
-                    defender.hp_current -= attacker.card.atk
-                print(defender.hp_current, attacker.card.atk)
+                if attacker.owner != defender.owner:
+                    print(defender.hp_current, attacker.card.atk)
+                    if attacker != defender :
+                        defender.hp_current -= attacker.card.atk
+                    print(defender.hp_current, attacker.card.atk)
             dragging = False
 
 
@@ -195,6 +174,7 @@ def snap_to_grid(xpos, ypos):
 def main():
     init_database()
     init_objects()
+
     while (True):
         draw_map()
         for event in pygame.event.get():
