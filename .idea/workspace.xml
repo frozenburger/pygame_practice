@@ -2,9 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1c6b955-6dbb-405f-93ac-f5d0472f6508" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CardBlitz/classes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/000_attack.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/001_move.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/002_skill.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CardBlitz/data/img/ui/004_nextturn.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CardBlitz/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/000_dragon.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/000_dragon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/001_warrior.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/001_warrior.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/002_archer.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/002_archer.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/003_witch.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/003_witch.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/004_cleric.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/004_cleric.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/data/img/005_wasp.png" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/data/img/cards/005_wasp.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CardBlitz/static_values.py" beforeDir="false" afterPath="$PROJECT_DIR$/CardBlitz/static_values.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,6 +42,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\s_jenova195\Desktop\Projects\Workspace_Pycharm\pygame_practice\CardBlitz\data\img\ui" />
+      <recent name="C:\Users\s_jenova195\Desktop\Projects\Workspace_Pycharm\pygame_practice\CardBlitz\data\img\cards" />
+      <recent name="C:\Users\s_jenova195\Desktop\Projects\Workspace_Pycharm\pygame_practice\CardBlitz\data\img" />
       <recent name="C:\Users\s_jenova195\Desktop\Projects\Workspace_Pycharm\pygame_practice\CardBlitz\data" />
     </key>
   </component>

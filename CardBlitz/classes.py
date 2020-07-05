@@ -12,9 +12,9 @@ class Player():
 
     def init_resources(self):
         resources = {}
-        resources['move_tokens'] = 0
-        resources['attack_tokens'] = 0
-        resources['skill_tokens'] = 0
+        resources['move_tokens'] = 2
+        resources['attack_tokens'] = 2
+        resources['skill_tokens'] = 1
         return resources
 
 
