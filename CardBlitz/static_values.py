@@ -22,6 +22,7 @@ drag_line_thickness = 5
 
 # Network Variables
 server = '192.168.56.1'
+server2 = '192.168.0.19'
 port = 8888
 utf8 = 'utf-8'
 header_len = 64

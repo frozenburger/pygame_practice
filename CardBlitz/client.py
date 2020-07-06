@@ -3,6 +3,7 @@ import pygame
 import CardBlitz.static_values as val
 import pandas as pd
 import socket
+import threading
 from CardBlitz.classes import *
 
 
@@ -189,10 +190,8 @@ def drag_controller(event):
                             if player.id == turn_player:
                                 # if you have a move token
                                 if player.resources['move_tokens'] > 0:
-                                    object.xpos, object.ypos = snap_to_grid(event.pos[0], event.pos[1])
-                                    object.rect = pygame.rect.Rect(object.xpos, object.ypos, val.square_size, val.square_size)
                                     object.drag = False
-                                    player.resources['move_tokens'] -= 1
+                                    command_move((object.xpos, object.ypos), event.pos)
                                     break
                 dragging = False
             elif event.button == val.right_mouse:
@@ -220,6 +219,17 @@ def drag_controller(event):
                     if player.id == turn_player:
                         clicked_object = ''
                         change_turn()
+
+
+def command_move(target, destination):
+    global objects, player, client
+    for object in objects:
+        if object.rect.collidepoint(target[0], target[1]):
+            object.xpos, object.ypos = snap_to_grid(destination[0], destination[1])
+            object.rect = pygame.rect.Rect(object.xpos, object.ypos, val.square_size, val.square_size)
+            player.resources['move_tokens'] -= 1
+            break
+    send_message(client, ','.join(('move',str(target), str(destination))))
 
 def change_turn():
     global turn_player, player, opponent
@@ -269,11 +279,25 @@ def snap_to_grid(xpos, ypos):
 
 def init_networking():
     global client
-    server = val.server
+    server = val.server2
     port = val.port
     client.connect((server, port))
+    thread = threading.Thread(target=receive_data, args=(client, (server, port)))
+    thread.start()
 
-def send_message(msg_string):
+def receive_data(conn, addr):
+    print('starting thread')
+    connected = True
+    while connected:
+        header = conn.recv(val.header_len).decode(val.utf8)
+        print(header)
+        if header != '':
+            msg_len = int(header)
+            msg = conn.recv(msg_len).decode(val.utf8)
+            if msg.split(',')[0] == 'move':
+                print(msg)
+
+def send_message(conn, msg_string):
     message = msg_string.encode(val.utf8)
     msg_len = len(message)
 
@@ -281,17 +305,18 @@ def send_message(msg_string):
     header = str(msg_len).encode(val.utf8)
     header += b' '*(val.header_len - len(header))
 
-    client.send(header)
-    client.send(message)
+    conn.send(header)
+    conn.send(message)
 
 
 def main():
+    global client
     init_database()
     init_objects()
     init_interface()
 
     init_networking()
-    send_message('Hello World from client!')
+    send_message(client, 'Hello World from client!')
     while (True):
         draw_map()
         draw_interface()
